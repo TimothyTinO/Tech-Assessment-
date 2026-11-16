@@ -4,7 +4,7 @@
 
 This repository contains my Python coding practice in preparation for technical assessments.
 
-The aim is to strengthen my problem-solving skills, improve my understanding of Python, and become more confident explaining my approach to coding challenges.
+The aim is to strengthen my problem solving skills, improve my understanding of Python, and become more confident explaining my approach to coding challenges.
 
 ## Topics
 
