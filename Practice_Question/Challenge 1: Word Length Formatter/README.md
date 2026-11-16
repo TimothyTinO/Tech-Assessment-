@@ -1,81 +1,323 @@
+# Challenge 1: Word Length Formatter
 
-Word Length Formatter
-Create a Python program that solves the problem below. Build your solution step by step, extending your code as the requirements change.
+Create a program that analyses a sentence and returns the length of each word. Build your solution step by step, starting with basic string manipulation before introducing more complicated requirements.
 
-Reminder: Any example tests are only a starting point. Write your own pytest tests to check normal inputs, edge cases, and unexpected combinations.
+REMINDER: The tests provided are a minimal base. You should be writing tests to ensure your code works as expected!
 
-Assessment note: There is likely more work here than you can complete in the allotted time. You are not expected to finish every extension. Focus on a working solution, tests, and explaining your decisions.
+## ⚠️ Note
 
-How to approach this challenge
-Read Step 1 fully before writing code.
-Explain what the function receives and what it must return.
-Write two or three tests of your own, then implement Step 1.
-Run pytest -v and fix any failures.
-Only then move on to the next step. Update your tests as the requirements change.
-Be ready to describe your algorithm and any edge cases aloud.
-You may use built-in Python functions and methods. Do not change the required function name or return type.
+There is *likely* too much work here to be done in the time you've been given. You are **not** expected to complete the whole challenge.
 
-Background
-A text-analysis team needs to measure how long the words in a message are. The first version is deliberately simple. As the requirements change, your program must handle messy spacing and punctuation without losing track of the words.
+## Background
 
-This challenge mainly tests strings, .split(), loops, lists, and careful interpretation of requirements.
+Text processing is a common task in software development. Many applications need to analyse written text, whether that involves checking user input, searching through documents or calculating statistics about words.
 
-Understanding the input
-The input is one string, such as "Python is fun". The output is a list of integers, where each integer represents the length of a word, in the same order as the input. Do not return a single total or a dictionary.
+Imagine you are working for a company that develops a tool to analyse the complexity of written sentences.
 
-Step 1 — Count the letters in each word
-Write the following function:
+The company wants to understand how long individual words are, as word length can help indicate how complex a piece of writing might be.
 
+For example, consider the sentence:
+
+`"python is fun"`
+
+It contains three words:
+
+- `python` contains 6 characters.
+- `is` contains 2 characters.
+- `fun` contains 3 characters.
+
+The program should therefore return:
+
+```python
+[6, 2, 3]
+```
+
+Your task is to build a function that can perform this operation on different sentences.
+
+As you progress through the challenge, you will extend your solution to support additional requirements, including handling whitespace, ignoring punctuation and filtering words based on their lengths.
+
+## Step 1: Basic Word Lengths
+
+Your task is to create a function called `word_lengths` that takes a string as input and returns a list containing the length of each word.
+
+Start with the following function:
+
+```python
 def word_lengths(sentence: str) -> list[int]:
     pass
-For Step 1, assume words are separated by exactly one space. Return a list containing the length of each word. An empty sentence returns an empty list.
+```
 
-Examples
+For this first step, you can assume:
 
-word_lengths("hello world")      # [5, 5]
-word_lengths("Python is fun")    # [6, 2, 3]
-word_lengths("a bb ccc")        # [1, 2, 3]
-word_lengths("")                # []
-Think about: What does splitting a sentence produce? How do you build a new list from the result? How can you handle an empty input without producing a length for a non-existent word?
+- The sentence contains words separated by exactly one space.
+- There are no spaces at the beginning or end.
+- Words contain letters only.
+- The input string may be empty.
 
-Before continuing, test: one word, several words of different lengths, and an empty string.
+**Requirements:**
 
-Step 2 — Support uneven spacing
-Real messages may have multiple spaces between words, or spaces at the beginning or end. Update the same function to ignore those extra spaces. Do not count blank segments as words.
+- Count the number of characters in each word.
+- Store each word's length in a list.
+- Preserve the original order of the words.
+- Return an empty list if the sentence is empty.
 
-Examples
+**Examples:**
 
-word_lengths("hello   world")       # [5, 5]
-word_lengths("  Python is fun  ")   # [6, 2, 3]
-word_lengths("   ")                 # []
-word_lengths("a    bb")             # [1, 2]
-Think about: What is the difference between sentence.split() and sentence.split(" ")? Which behaviour helps you avoid empty words?
+```python
+word_lengths("hello")
+# [5]
 
-Before continuing, test: leading spaces, trailing spaces, repeated spaces, and a sentence containing only spaces.
+word_lengths("hello world")
+# [5, 5]
 
-Step 3 — Ignore selected punctuation
-The team now wants the lengths of the words without counting these punctuation characters: . , ! ?. These characters may appear at the start, middle, or end of a word. All other characters continue to count normally. A segment made entirely of ignored punctuation should not contribute a length to the output.
+word_lengths("python is fun")
+# [6, 2, 3]
 
-Examples
+word_lengths("a bb ccc dddd")
+# [1, 2, 3, 4]
 
-word_lengths("Hello, world!")       # [5, 5]
-word_lengths("Wait... what?!")      # [4, 4]
-word_lengths("wow! really?")       # [3, 6]
-word_lengths("Hi !!! there")        # [2, 5]
-word_lengths("a-b")                 # [3]  # hyphen still counts
-Think about: Do you need to remove punctuation from the original sentence, or can you work with each word? What happens if removing punctuation leaves an empty string?
+word_lengths("")
+# []
+```
 
-Testing checklist
-Step 1: simple words and empty input
-Step 2: repeated, leading, and trailing spaces
-Step 3: punctuation at different positions
-Step 3: punctuation-only segments
-Original word order is preserved
-Interview-style questions
-Why did you choose a list as your result?
-What does your loop do on each iteration?
-How did your tests change between Step 1 and Step 3?
-What would happen if the input included a tab or newline? (You do not need to add extra support unless required.)
-Submission guidance
-Write your solution in a Python file and your tests in a separate test_*.py file. You can run pytest -v from the relevant project directory. The README intentionally contains no completed solution.
+**Things to consider:**
 
+- How can you separate a sentence into individual words?
+- How can you find the length of a string?
+- How can you store multiple values in a list?
+- How would your function handle an empty string?
+
+Make sure your solution works with the examples above before moving on.
+
+## Step 2: Handling Multiple Spaces
+
+Your company has noticed that users sometimes include additional spaces when entering sentences.
+
+Your current solution may not correctly handle these cases.
+
+Extend your function so that it can process sentences containing multiple spaces, including spaces at the beginning and end.
+
+**Requirements:**
+
+- Ignore leading and trailing spaces.
+- Ignore additional spaces between words.
+- Do not treat spaces as individual words.
+- Do not include zero-length words in the output.
+- Return an empty list if the sentence contains only spaces.
+
+**Examples:**
+
+```python
+word_lengths("hello   world")
+# [5, 5]
+
+word_lengths("  python is fun  ")
+# [6, 2, 3]
+
+word_lengths("a    bb   ccc")
+# [1, 2, 3]
+
+word_lengths("   hello")
+# [5]
+
+word_lengths("world   ")
+# [5]
+
+word_lengths("     ")
+# []
+```
+
+**Things to consider:**
+
+- What happens when a sentence contains consecutive spaces?
+- How does `split()` behave when no separator is provided?
+- What is the difference between `split()` and `split(" ")`?
+- How can you ensure that empty words are not included?
+
+Your function should continue to work with all the examples from Step 1.
+
+## Step 3: Ignoring Punctuation
+
+The company now wants to analyse sentences containing punctuation.
+
+Currently, punctuation might be counted as part of a word, which could produce incorrect results.
+
+For example, the word `"hello!"` contains six characters, but the actual word `"hello"` contains only five letters.
+
+Extend your solution so that it ignores the following punctuation characters:
+
+```text
+. , ! ?
+```
+
+**Requirements:**
+
+- Ignore full stops, commas, exclamation marks and question marks.
+- Punctuation should not contribute to a word's length.
+- Punctuation may appear at the beginning, middle or end of a word.
+- If a word contains only punctuation, ignore that word.
+- All other characters should still count normally.
+- Continue handling multiple spaces as described in Step 2.
+
+**Examples:**
+
+```python
+word_lengths("hello, world!")
+# [5, 5]
+
+word_lengths("python is fun!")
+# [6, 2, 3]
+
+word_lengths("Wait... what?!")
+# [4, 4]
+
+word_lengths("Hello!!! How are you?")
+# [5, 3, 3, 3]
+
+word_lengths("hello...   world!!!")
+# [5, 5]
+
+word_lengths("...")
+# []
+
+word_lengths("hello ... world")
+# [5, 5]
+
+word_lengths("")
+# []
+```
+
+**Things to consider:**
+
+- Which Python string methods allow you to remove characters?
+- How would you handle multiple punctuation marks together?
+- What happens if a word consists entirely of punctuation?
+- Should punctuation be removed before or after measuring a word's length?
+
+Your solution should still satisfy the requirements from Steps 1 and 2.
+
+## Step 4: Filtering Words by Length
+
+The company would now like to filter out words that are shorter than a specified minimum length.
+
+For example, given the sentence:
+
+`"python is fun"`
+
+If the minimum length is `3`, the word `"is"` should be excluded because it contains only two characters.
+
+The expected output would be:
+
+```python
+[6, 3]
+```
+
+Extend your function by adding an optional parameter called `min_length`.
+
+```python
+def word_lengths(sentence: str, min_length: int = 0) -> list[int]:
+    pass
+```
+
+**Requirements:**
+
+- Only return word lengths that are greater than or equal to `min_length`.
+- Continue ignoring additional spaces and punctuation.
+- If no words meet the minimum length, return an empty list.
+- If `min_length` is not provided, the function should behave as it did in Step 3.
+- Assume `min_length` is a non-negative integer.
+
+**Examples:**
+
+```python
+word_lengths("python is fun", min_length=3)
+# [6, 3]
+
+word_lengths("hello world", min_length=5)
+# [5, 5]
+
+word_lengths("a bb ccc dddd", min_length=3)
+# [3, 4]
+
+word_lengths("hello, wonderful world!", min_length=6)
+# [9]
+
+word_lengths("one two three", min_length=10)
+# []
+
+word_lengths("  hello!!!   world  ", min_length=5)
+# [5, 5]
+
+word_lengths("python is fun")
+# [6, 2, 3]
+```
+
+**Things to consider:**
+
+- At what point should you check the length of a word?
+- Should punctuation be removed before applying the minimum length?
+- How can you use conditional statements to decide which values to include?
+- How can you ensure your previous tests still pass?
+
+## Testing
+
+You should write your own tests using `pytest`.
+
+The examples above are not exhaustive. Think carefully about other inputs that might cause your function to behave unexpectedly.
+
+Some areas worth testing include:
+
+- Empty strings.
+- Single-word sentences.
+- Sentences containing multiple words.
+- Leading and trailing whitespace.
+- Multiple spaces between words.
+- Words containing several punctuation characters.
+- Sentences containing only punctuation.
+- Different minimum word lengths.
+- Cases where no words satisfy the minimum length.
+
+**Example:**
+
+```python
+from main import word_lengths
+
+
+def test_single_word():
+    assert word_lengths("hello") == [5]
+
+
+def test_multiple_words():
+    assert word_lengths("python is fun") == [6, 2, 3]
+
+
+def test_empty_sentence():
+    assert word_lengths("") == []
+
+
+# Write additional tests below.
+```
+
+Run your tests using:
+
+```bash
+pytest -v
+```
+
+Remember that you should not rely only on the example tests. Try to identify edge cases independently.
+
+## Technical Assessment Practice
+
+Before implementing your solution, consider how you would explain your approach to an interviewer.
+
+You should be prepared to discuss:
+
+1. What inputs does your function accept, and what should it return?
+2. How will you separate the sentence into individual words?
+3. Which Python string methods would be useful?
+4. How will you build the resulting list?
+5. What edge cases should you account for?
+6. How will you test the function?
+7. How would you extend your solution when the requirements change?
+
+**Start with Step 1.** Get your initial solution working and write your own tests before attempting the later steps.
