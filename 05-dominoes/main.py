@@ -1,4 +1,4 @@
-"""File to solve dominoe problem"""
+"""File to solve dominoes problem"""
 
 def get_dominoes_state(dominoes: str) -> list[str]:
   """Find the end state of a set of dominoes if the
