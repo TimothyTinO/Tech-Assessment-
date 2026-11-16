@@ -555,4 +555,321 @@ Values from `b` replace matching values from `a`.
 
 ## Sets
 
-Sets store unique values and do not guarantee
+Sets store unique values and do not guarantee an element order.
+
+### Creating Sets
+
+```python
+numbers = {1, 2, 3}
+empty = set()
+
+unique = set([1, 2, 2, 3])
+# {1, 2, 3}
+```
+
+### Adding and Removing
+
+```python
+numbers = {1, 2, 3}
+
+numbers.add(4)
+# {1, 2, 3, 4}
+
+numbers.remove(2)
+# {1, 3, 4}
+
+numbers.discard(10)  # No error if missing
+```
+
+`remove()` raises `KeyError` when the element does not exist, while `discard()` does not.
+
+### Set Operations
+
+```python
+a = {1, 2, 3}
+b = {3, 4, 5}
+
+a | b     # {1, 2, 3, 4, 5} (union)
+a & b     # {3}             (intersection)
+a - b     # {1, 2}          (difference)
+a ^ b     # {1, 2, 4, 5}    (symmetric difference)
+```
+
+### Membership Checks
+
+```python
+numbers = {1, 2, 3}
+
+2 in numbers     # True
+5 in numbers     # False
+```
+
+Set membership is typically faster than searching through a list when working with large collections.
+
+---
+
+## Common Collection Operations
+
+### Length
+
+```python
+len([1, 2, 3])            # 3
+len((1, 2, 3))            # 3
+len({"a": 1, "b": 2})     # 2
+len({1, 2, 3})            # 3
+```
+
+### Membership
+
+```python
+2 in [1, 2, 3]           # True
+2 in (1, 2, 3)           # True
+"a" in {"a": 10}         # True
+2 in {1, 2, 3}           # True
+```
+
+For dictionaries, `in` checks keys rather than values.
+
+### Combining Collections
+
+```python
+[1, 2] + [3, 4]
+# [1, 2, 3, 4]
+
+(1, 2) + (3, 4)
+# (1, 2, 3, 4)
+
+{1, 2} | {2, 3}
+# {1, 2, 3}
+```
+
+### Converting Between Collections
+
+```python
+list((1, 2, 3))      # [1, 2, 3]
+tuple([1, 2, 3])     # (1, 2, 3)
+set([1, 2, 2, 3])    # {1, 2, 3}
+list("abc")          # ['a', 'b', 'c']
+```
+
+### Using `zip()`
+
+`zip()` combines elements from multiple iterables by position.
+
+```python
+names = ["Alex", "Sam", "Jo"]
+scores = [10, 20, 30]
+
+list(zip(names, scores))
+
+# [
+#     ("Alex", 10),
+#     ("Sam", 20),
+#     ("Jo", 30)
+# ]
+```
+
+### Unpacking with `*`
+
+```python
+numbers = [1, 2, 3, 4]
+
+first, *middle, last = numbers
+
+first     # 1
+middle    # [2, 3]
+last      # 4
+```
+
+---
+
+## Common Gotchas
+
+### 1. Lists Are Mutable
+
+```python
+a = [1, 2, 3]
+b = a
+
+b.append(4)
+
+print(a)
+# [1, 2, 3, 4]
+```
+
+Both variables reference the same list.
+
+Create a shallow copy if an independent outer list is needed:
+
+```python
+a = [1, 2, 3]
+b = a.copy()
+```
+
+For nested lists, use `copy.deepcopy()` if the nested objects must also be independent.
+
+### 2. List Methods Often Return `None`
+
+```python
+numbers = [3, 1, 2]
+
+result = numbers.sort()
+
+print(result)   # None
+print(numbers)  # [1, 2, 3]
+```
+
+Methods such as `append()`, `extend()` and `sort()` modify the list in place.
+
+### 3. Dictionary Keys Must Be Unique
+
+```python
+data = {
+    "Alex": 10,
+    "Alex": 20
+}
+
+# {"Alex": 20}
+```
+
+The later value replaces the earlier one.
+
+### 4. Sets Do Not Support Indexing
+
+```python
+numbers = {10, 20, 30}
+
+# numbers[0]  # TypeError
+```
+
+### 5. Empty Collections
+
+```python
+bool([])       # False
+bool(())       # False
+bool({})       # False
+bool(set())    # False
+```
+
+### 6. Avoid Mutable Default Arguments
+
+```python
+# Avoid:
+def add_item(value, items=[]):
+    items.append(value)
+    return items
+```
+
+The same list can be reused across function calls.
+
+Use:
+
+```python
+def add_item(value, items=None):
+    if items is None:
+        items = []
+
+    items.append(value)
+    return items
+```
+
+---
+
+## Common Recipes
+
+### Remove Duplicates While Preserving Order
+
+```python
+numbers = [1, 2, 2, 3, 1]
+
+unique = list(dict.fromkeys(numbers))
+# [1, 2, 3]
+```
+
+### Flatten a Nested List
+
+```python
+nested = [[1, 2], [3, 4], [5]]
+
+flat = [value for row in nested for value in row]
+# [1, 2, 3, 4, 5]
+```
+
+### Find Common Elements
+
+```python
+a = [1, 2, 3]
+b = [2, 3, 4]
+
+common = set(a) & set(b)
+# {2, 3}
+```
+
+### Find the Largest Value in a Dictionary
+
+```python
+scores = {"Alex": 10, "Sam": 30, "Jo": 20}
+
+winner = max(scores, key=scores.get)
+# "Sam"
+```
+
+### Convert a List of Tuples Into a Dictionary
+
+```python
+records = [("Alex", 10), ("Sam", 20)]
+
+scores = dict(records)
+# {"Alex": 10, "Sam": 20}
+```
+
+### Check if a Collection Is Empty
+
+```python
+numbers = []
+
+if not numbers:
+    print("Empty collection")
+```
+
+### Find the Number of Unique Elements
+
+```python
+numbers = [1, 2, 2, 3, 3, 3]
+
+len(set(numbers))
+# 3
+```
+
+### Build a List of Index-Value Pairs
+
+```python
+names = ["Alex", "Sam", "Jo"]
+
+positions = list(enumerate(names))
+# [(0, "Alex"), (1, "Sam"), (2, "Jo")]
+```
+
+---
+
+## Quick Reference
+
+| Task | Method / Function |
+|---|---|
+| Add one item to a list | `append()` |
+| Add multiple items | `extend()` |
+| Remove a list item by value | `remove()` |
+| Remove by index | `pop()` |
+| Find an element's index | `index()` |
+| Count occurrences | `count()` |
+| Reverse a list in place | `reverse()` |
+| Create a shallow list copy | `copy()` |
+| Access dictionary safely | `get()` |
+| Loop through dictionary pairs | `items()` |
+| Add a value to a set | `add()` |
+| Remove duplicates | `set()` |
+| Get index and value | `enumerate()` |
+| Combine iterables | `zip()` |
+| Find collection length | `len()` |
+
+**Key idea:** Choose the right collection for the problem. Lists are useful for ordered sequences, tuples for fixed groups of values, dictionaries for key-value relationships and sets for unique values.
